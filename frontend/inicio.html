@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Monitoreo de Bombas de Agua</title>
+  <link href="/style.css" rel="stylesheet" />
+
+</head>
+<body>
+
+<nav>
+<a href="/">Inicio</a>
+<a href="/historial">Historial</a>
+<a href="/temperatura">Temperatura</a>
+<a href="/vibracion">Vibración</a>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="card">
+      <h2>Temperatura</h2>
+      <span id="temp">-- °C</span>
+    </div>
+    <div class="chart-placeholder">
+      <h3>Gráfica Temperatura</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="card">
+      <h2>Vibración</h2>
+      <span id="vib">-- m/s²</span>
+    </div>
+    <div class="chart-placeholder">
+      <h3>Gráfica Vibración</h3>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Contacto: hydrosense@bombasagua.com</p>
+  <p>Teléfono: +56 9 64332385</p>
+</footer>
+
+<script>
+// Simulador de datos (hasta que se conecte el ESP32)
+function actualizarDatos() {
+  const temp = (20 + Math.random() * 10).toFixed(2); 
+  const vib = (0.1 + Math.random() * 0.5).toFixed(2); 
+
+  document.getElementById('temp').textContent = `${temp} °C`;
+  document.getElementById('vib').textContent = `${vib} m/s²`;
+}
+
+actualizarDatos();
+setInterval(actualizarDatos, 5000);
+</script>
+
+</body>
+
+</html>
+
