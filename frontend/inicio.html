@@ -4,15 +4,14 @@
   <meta charset="UTF-8" />
   <title>Monitoreo de Bombas de Agua</title>
   <link href="/style.css" rel="stylesheet" />
-
 </head>
 <body>
 
 <nav>
-<a href="/">Inicio</a>
-<a href="/historial">Historial</a>
-<a href="/temperatura">Temperatura</a>
-<a href="/vibracion">Vibración</a>
+  <a href="/">Inicio</a>
+  <a href="/historial">Historial</a>
+  <a href="/temperatura">Temperatura</a>
+  <a href="/vibracion">Vibración</a>
 </nav>
 
 <div class="container">
@@ -29,7 +28,8 @@
   <div class="row">
     <div class="card">
       <h2>Vibración</h2>
-      <span id="vib">-- m/s²</span>
+      <span id="vib">--</span>
+      <div id="vib-time" style="font-size: 0.9em; color: gray;"></div>
     </div>
     <div class="chart-placeholder">
       <h3>Gráfica Vibración</h3>
@@ -43,13 +43,26 @@
 </footer>
 
 <script>
-// Simulador de datos (hasta que se conecte el ESP32)
-function actualizarDatos() {
+async function actualizarDatos() {
+  // Puedes mantener esto si aún no tienes sensores de temperatura reales
   const temp = (20 + Math.random() * 10).toFixed(2); 
-  const vib = (0.1 + Math.random() * 0.5).toFixed(2); 
-
   document.getElementById('temp').textContent = `${temp} °C`;
-  document.getElementById('vib').textContent = `${vib} m/s²`;
+
+  try {
+    const res = await fetch('/api/estado-vibracion');
+    const data = await res.json();
+
+    if (data && data.vibracion) {
+      document.getElementById('vib').textContent = "¡Vibración detectada!";
+      document.getElementById('vib-time').textContent = `Última: ${new Date(data.timestamp).toLocaleString()}`;
+    } else {
+      document.getElementById('vib').textContent = "Sin vibración";
+      document.getElementById('vib-time').textContent = "";
+    }
+  } catch (error) {
+    document.getElementById('vib').textContent = "Error al obtener datos";
+    console.error("Error al consultar el servidor:", error);
+  }
 }
 
 actualizarDatos();
@@ -57,6 +70,4 @@ setInterval(actualizarDatos, 5000);
 </script>
 
 </body>
-
 </html>
-
