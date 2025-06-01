@@ -37,6 +37,22 @@ app.get('/vibracion', async(req, res) => {
   res.sendFile(path.resolve('frontend', 'vibracion.html'));
 });
 
+let ultimaVibracion = null;
+
+app.post('/api/vibracion', (req, res) => {
+  const { vibracion } = req.body;
+  ultimaVibracion = {
+    vibracion,
+    timestamp: new Date().toISOString()
+  };
+  console.log("Vibración detectada:", ultimaVibracion);
+  res.sendStatus(200);
+});
+
+app.get('/api/estado-vibracion', (req, res) => {
+  res.json(ultimaVibracion || { vibracion: false, timestamp: null });
+});
+
 app.listen(3000, '0.0.0.0', () => {
   console.log("Servidor escuchandooooo en puerto 3000");
 });
