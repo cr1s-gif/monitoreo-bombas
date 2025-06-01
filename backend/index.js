@@ -8,6 +8,19 @@ app.use(express.json());
 app.use(express.static('public'));
 
 
+let temperaturaActual = null;
+
+app.post('/temperatura', (req, res) => {
+  const { temperatura } = req.body;
+  console.log("Temperatura recibidaaa: ");
+  temperaturaActual = temperatura;
+  res.sendStatus(200);
+});
+
+app.get('/temperatura', (req, res) => {
+  res.json({ temperatura: temperaturaActual });
+});
+
 app.get('/', (req, res) => {
   res.sendFile(path.resolve('frontend', 'inicio.html'));
 });
@@ -24,6 +37,6 @@ app.get('/vibracion', async(req, res) => {
   res.sendFile(path.resolve('frontend', 'vibracion.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en http://localhost:${PORT}`);
+app.listen(3000, '0.0.0.0', () => {
+  console.log("Servidor escuchandooooo en puerto 3000");
 });

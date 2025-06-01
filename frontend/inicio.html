@@ -18,8 +18,7 @@
 <div class="container">
   <div class="row">
     <div class="card">
-      <h2>Temperatura</h2>
-      <span id="temp">-- °C</span>
+      <h2>Temperatura: <span id="valor-temp">--</span>ºC </h2>
     </div>
     <div class="chart-placeholder">
       <h3>Gráfica Temperatura</h3>
@@ -37,24 +36,48 @@
   </div>
 </div>
 
+<p style="color_ red">Version actual: 1.2 </p>
+
+<div id="modalAlerta" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+background-color:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+  <div style="background:white; padding:20px; border-radius:10px; text-align:center;">
+    <h2> ¡Alerta de Temperatura!</h2>
+    <p>La temperatura ha superado los 40°C.</p>
+    <button onclick="cerrarModal()">Cerrar</button>
+  </div>
+</div>
+
 <footer>
   <p>Contacto: hydrosense@bombasagua.com</p>
   <p>Teléfono: +56 9 64332385</p>
 </footer>
 
 <script>
-// Simulador de datos (hasta que se conecte el ESP32)
-function actualizarDatos() {
-  const temp = (20 + Math.random() * 10).toFixed(2); 
-  const vib = (0.1 + Math.random() * 0.5).toFixed(2); 
+  async function obtenerTemperatura() {
+    try {
+      const res = await fetch('/temperatura');
+      const data = await res.json();
+      if (data.temperatura !== null && data.temperatura !== undefined) {
+        const temp = data.temperatura;
+        document.getElementById('valor-temp').textContent = temp.toFixed(2);
 
-  document.getElementById('temp').textContent = `${temp} °C`;
-  document.getElementById('vib').textContent = `${vib} m/s²`;
-}
+        // Mostrar alerta si supera los 40 °C
+        if (data.temperatura > 30) {
+          document.getElementById('modalAlerta').style.display = 'flex';
+        }
+      }
+    } catch (error) {
+      console.error('Error al obtener temperatura:', error);
+    }
+  }
 
-actualizarDatos();
-setInterval(actualizarDatos, 5000);
+  function cerrarModal() {
+    document.getElementById("modalAlerta").style.display = "none";
+  }
+
+  setInterval(obtenerTemperatura, 2000); 
 </script>
+
 
 </body>
 
