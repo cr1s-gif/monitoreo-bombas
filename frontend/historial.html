@@ -14,9 +14,41 @@
     <a href="/vibracion">Vibración</a>
   </nav>
 
-  <div class="container">
-    <h1>Contenido próximamente...</h1>
-  </div>
+  <div class="tablahis">
+  <h1>Historial de Temperaturas</h1>
+  <table id="tabla-historial">
+    <caption>Datos registrados por minuto</caption>
+    <thead>
+      <tr>
+        <th>Temperatura (°C)</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+  </table>
+</div>
+
+
+  <script>
+    fetch('/historial-temperatura')
+      .then(res => res.json())
+      .then(data => {
+        const tabla = document.getElementById('tabla-historial').querySelector('tbody');
+        tabla.innerHTML = ''; 
+
+        data.forEach(item => {
+          const fila = document.createElement('tr');
+          fila.innerHTML = `
+            <td>${item.valor} °C</td>
+            <td>${new Date(item.fecha).toLocaleString()}</td>
+          `;
+          tabla.appendChild(fila);
+        });
+      })
+      .catch(error => console.error('Error cargando historial:', error));
+  </script>
 
   <footer>
     <p>Contacto: hydrosense@bombasagua.com</p>

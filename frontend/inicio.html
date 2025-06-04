@@ -57,8 +57,9 @@ background-color:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-it
 <script>
   async function obtenerTemperatura() {
     try {
-      const res = await fetch('/temperatura');
+      const res = await fetch('/api/temperatura');
       const data = await res.json();
+      console.log('Datos recibidos:', data)
       if (data.temperatura !== null && data.temperatura !== undefined) {
         const temp = data.temperatura;
         document.getElementById('valor-temp').textContent = temp.toFixed(2);
